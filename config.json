@@ -1,0 +1,17 @@
+{
+  "db": {
+    "username": "root",
+    "password": "pp1207-2230",
+    "database": "class",
+    "ip": "192.168.3.7",
+    "port": "3306"
+
+  },
+  "email":{
+    "server": "smtp.163.com",
+    "ssl": true,
+    "port": "465",
+    "mail": "yzp2369114@163.com",
+    "password": "WGKAJNKAZQEJTLFL"
+  }
+}
