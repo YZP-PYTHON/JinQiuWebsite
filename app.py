@@ -1,5 +1,6 @@
 
 import random
+from crypt import methods
 from urllib import request
 import pymysql
 from flask import Flask, render_template, request, make_response,redirect
@@ -127,6 +128,9 @@ def singin_message():
 @app.route('/email',methods=['POST','GET'])
 def email():
     return render_template('email.html')
+@app.route('/send_email',methods=['POST','GET'])
+def send():
+
 
 
 
