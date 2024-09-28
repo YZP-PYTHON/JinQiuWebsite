@@ -1,6 +1,7 @@
 
 import random
 from crypt import methods
+from random import randint
 from urllib import request
 import pymysql
 from flask import Flask, render_template, request, make_response,redirect
@@ -11,7 +12,13 @@ from flask_mail import Mail, Message
 import json
 
 def yzm(lenth):
+    y=0
     for i in range(lenth):
+        a=randint(0,9)
+        y=y+a
+        y=y*10
+    return y
+
 
 json_file_path="config.json"
 with open(json_file_path, 'r', encoding='utf-8') as file:
@@ -134,6 +141,14 @@ def email():
 @app.route('/send_email',methods=['POST','GET'])
 def send():
     email=request.form.get('email')
+    code=yzm(6)
+    msg=Message('Your Verification Code', sender=data['email']['mail'], recipients=[email])
+    msg.body=f'Your verification code is: {code}'
+    mail.send(msg)
+    sql1='INSERT INTO yzm (email, code) VALUES (%s, %s'
+    yb.execute(sql1,(email,code,))
+    yb.fetchone()
+
 
 
 
