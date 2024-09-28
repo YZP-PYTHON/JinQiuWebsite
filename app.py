@@ -10,6 +10,9 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 import json
 
+def yzm(lenth):
+    for i in range(lenth):
+
 json_file_path="config.json"
 with open(json_file_path, 'r', encoding='utf-8') as file:
     data = json.load(file)
@@ -130,6 +133,7 @@ def email():
     return render_template('email.html')
 @app.route('/send_email',methods=['POST','GET'])
 def send():
+    email=request.form.get('email')
 
 
 
