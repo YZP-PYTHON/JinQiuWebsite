@@ -53,7 +53,7 @@ def hello_world():  # put application's code here
 
     if log == '1':
         cookie_value = request.cookies.get('uuid')
-        sql = "SELECT USERNAME FROM user WHERE uuid = %s"
+        sql = "SELECT username FROM user WHERE uuid = %s"
         yb.execute(sql, (cookie_value,))
         un = yb.fetchone()
     else:
@@ -77,12 +77,12 @@ def logmessage():
     emil = request.form['emil']
     password = request.form['password']
 
-    select_query = "select count(ID) from user where emil=%s and PASSWORD=md5(%s)"
+    select_query = "select count(ID) from user where email=%s and password=md5(%s)"
     yb.execute(select_query, [emil, password])
     data = yb.fetchone()
     print(data)
     if data[0] == 1:
-        a1 = "SELECT uuid FROM user WHERE emil = %s"
+        a1 = "SELECT uuid FROM user WHERE email = %s"
         yb.execute(a1, (emil,))
         result = yb.fetchone()
         response = make_response(render_template('login_succed.html'))
@@ -106,12 +106,12 @@ def singin_message():
     password = request.form.get('password')
     username = request.form.get('username')
     StudyID = request.form.get('StudyID')
-    select_query = "select ID from user where StudyID=md5(%s)"
+    select_query = "select id from user where StudyID=md5(%s)"
     yb.execute(select_query, [StudyID])
     re = yb.fetchone()
     print(re)
     if re:
-        a2="UPDATE user SET PASSWORD=MD5(%s), emil=%s, USERNAME=%s, uuid= MD5(%s) ,YN=%s WHERE ID=%s;"
+        a2="UPDATE user SET password=MD5(%s), email=%s, username=%s, uuid= MD5(%s) ,yn=%s WHERE id=%s;"
         uuid=email+password
         print(password,email,username,uuid,re[0])
 
@@ -119,12 +119,12 @@ def singin_message():
         yb.execute(a2,[password,email,username,uuid,0,re[0]])
         sql.commit()
         response = make_response(redirect('/email'))
-        response.set_cookie('first_time',1)
+        response.set_cookie('first_time',"1")
         return response
 
     else:
         return render_template('singin_fail.html')
-@app.route('/email',methods=['POST'])
+@app.route('/email',methods=['POST','GET'])
 def email():
     return render_template('email.html')
 
