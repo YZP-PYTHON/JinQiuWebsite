@@ -1,6 +1,7 @@
 
 import random
-from crypt import methods
+from datetime import datetime
+#from crypt import methods
 from random import randint
 from urllib import request
 import pymysql
@@ -145,10 +146,42 @@ def send():
     msg=Message('Your Verification Code', sender=data['email']['mail'], recipients=[email])
     msg.body=f'Your verification code is: {code}'
     mail.send(msg)
-    sql1='INSERT INTO yzm (email, code) VALUES (%s, %s'
+    sql1='INSERT INTO yzm (email, text) VALUES (%s, %s)'
     yb.execute(sql1,(email,code,))
-    yb.fetchone()
-
+    sql.commit()
+    return redirect('/yzmyz')
+@app.route('/yzmyz')
+def yzmyz():
+    return render_template('yzmyz.html')
+@app.route('/yzm_message',methods=['POST'])
+def yzm_messang():
+    global time1
+    yzm1=request.form.get('yzm')
+    email=request.form.get('email')
+    sql1='select yn,creat_time from yzm where email=%s and text=%s'
+    yb.execute(sql1,(email,yzm1))
+    ans=yb.fetchone()
+    sql.commit()
+    if ans is not None:
+        time1=datetime.now()
+        now=datetime.now()
+        ytime=ans[1]
+        time1=now-ytime
+        print(str(time1))
+    if ans :
+        return redirect('/yzm_fail')
+    elif time1 <= 360:
+        sql2='update yzm set yn = 1 where email=@s and text=%s'
+        yb.execute(sql2,(email,yzm1))
+        sql.commit()
+        print(ans, email, yzm1,time1)
+        return redirect('/yzm_succeed')
+@app.route('/yzm_fail')
+def yzm_fail():
+    return render_template('yzm_fail.html')
+@app.route('/yzm_succeed')
+def yzm_succeed():
+    return render_template('yzm_succeed.html')
 
 
 
