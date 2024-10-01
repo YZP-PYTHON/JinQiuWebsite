@@ -131,7 +131,7 @@ def singin_message():
         yb.execute(a2,[password,email,username,uuid,0,re[0]])
         sql.commit()
         response = make_response(redirect('/email'))
-        response.set_cookie('first_time',"1")
+        response.set_cookie('email',email)
         return response
 
     else:
@@ -149,13 +149,15 @@ def send():
     sql1='INSERT INTO yzm (email, text) VALUES (%s, %s)'
     yb.execute(sql1,(email,code,))
     sql.commit()
+
     return redirect('/yzmyz')
 @app.route('/yzmyz')
 def yzmyz():
     return render_template('yzmyz.html')
 @app.route('/yzm_message',methods=['POST'])
 def yzm_messang():
-    global time1
+    #global time1
+    time1=None
     yzm1=request.form.get('yzm')
     email=request.form.get('email')
     sql1='select yn,creat_time from yzm where email=%s and text=%s'
@@ -163,19 +165,27 @@ def yzm_messang():
     ans=yb.fetchone()
     sql.commit()
     if ans is not None:
-        time1=datetime.now()
+
         now=datetime.now()
         ytime=ans[1]
-        time1=now-ytime
+        time1= (now-ytime).total_seconds()
         print(str(time1))
-    if ans :
+    else:
         return redirect('/yzm_fail')
-    elif time1 <= 360:
-        sql2='update yzm set yn = 1 where email=@s and text=%s'
+    if ans is None:
+        return redirect('/yzm_fail')
+    elif time1 is not None and time1 <= 360:
+        sql2='update yzm set yn = 1 where email=%s and text=%s'
         yb.execute(sql2,(email,yzm1))
         sql.commit()
         print(ans, email, yzm1,time1)
+        sql3='update user set yn = 1 where email=%s'
+        yb.execute(sql3,(email,))
+        sql.commit()
+
         return redirect('/yzm_succeed')
+    else:
+        return 'err'
 @app.route('/yzm_fail')
 def yzm_fail():
     return render_template('yzm_fail.html')
