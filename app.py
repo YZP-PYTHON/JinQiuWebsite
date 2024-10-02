@@ -62,6 +62,7 @@ yb = sql.cursor()
 @app.route('/')
 def hello_world():  # put application's code here
     log = request.cookies.get('login')
+    sql1='select scr,url from imgli'
 
     if log == '1':
         cookie_value = request.cookies.get('uuid')
@@ -70,7 +71,7 @@ def hello_world():  # put application's code here
         un = yb.fetchone()
     else:
         un = (1,)
-    return render_template("index.html", login=log, username=un[0])
+    return render_template("index.html", login=log, username=un[0],imglist=imglist)
 
 
 @app.route('/login')
