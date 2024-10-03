@@ -64,7 +64,7 @@ def hello_world():  # put application's code here
     log = request.cookies.get('login')
     sql1='select scr,url from imglist where yn = 1'
     yb.execute(sql1)
-    aa=yb.fetchall()
+    imglist=yb.fetchall()
     sql.commit()
 
     if log == '1':
