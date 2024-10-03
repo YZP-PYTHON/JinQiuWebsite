@@ -62,12 +62,15 @@ yb = sql.cursor()
 @app.route('/')
 def hello_world():  # put application's code here
     log = request.cookies.get('login')
-    sql1='select scr,url from imgli'
+    sql1='select scr,url from imglist where yn = 1'
+    yb.execute(sql1)
+    aa=yb.fetchall()
+    sql.commit()
 
     if log == '1':
         cookie_value = request.cookies.get('uuid')
-        sql = "SELECT username FROM user WHERE uuid = %s"
-        yb.execute(sql, (cookie_value,))
+        sql2 = "SELECT username FROM user WHERE uuid = %s"
+        yb.execute(sql2, (cookie_value,))
         un = yb.fetchone()
     else:
         un = (1,)
