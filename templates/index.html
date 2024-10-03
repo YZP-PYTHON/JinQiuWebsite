@@ -42,7 +42,9 @@
               <div class="carousel-inner">
                   {% for i in imglist :%}
                     <div class="carousel-item active">
-                      <img src={{i['img']}} class="d-block w-100" alt={{i['l']}}>
+                        <a href={{i[i]}}>
+                            <img src={{i[0]}} class="d-block w-100" >
+                        </a>
                     </div>
                   {%endfor%}
 
