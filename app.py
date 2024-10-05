@@ -196,6 +196,10 @@ def yzm_fail():
 @app.route('/yzm_succeed')
 def yzm_succeed():
     return render_template('yzm_succeed.html')
+@app.route('/user')
+def user():
+    uuid=request.cookies.get('uuid')
+
 
 
 
